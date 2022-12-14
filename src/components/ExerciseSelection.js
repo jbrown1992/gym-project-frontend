@@ -7,23 +7,18 @@ const createOption = (label) => ({
     value: label.toLowerCase().replace(/\W/g, ''),
 });
 
-const defaultOptions = [
-    createOption('One'),
-    createOption('Two'),
-    createOption('Three'),
-];
-
-
-
-export default function ExerciseSelection() {
-
-    const [exerciseList, setExerciseList] = useState();
-    const [selectedExercise, setSelectedExercise] = useState();
+export default function ExerciseSelection(props) {
+    console.log(props)
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState();
-    const [value, setValue] = useState();
+    const [value, _setValue] = useState();
 
-
+    const setValue = (value) => {
+        console.log(value)
+        props.onChange(value.value)
+        _setValue(value);
+        // ... or there
+    };
 
     useEffect(() => {
         fetch('https://localhost:7190/Exercise')
@@ -36,6 +31,8 @@ export default function ExerciseSelection() {
                 setOptions(exerciseNames)
             });
     }, [])
+
+    
 
     const handleCreate = (inputValue) => {
 
@@ -80,24 +77,3 @@ export default function ExerciseSelection() {
         </div>
     );
 };
-
-    // return (
-    //     <div>
-    //         <div>Select an Exercise:</div>
-    //         {exerciseList ?
-    //             <CreatableSelect isClearable options={exerciseList} onChange={(e) => { setSelectedExercise(e.value)}}/>
-    //             : null
-    //         }
-    //         {/* <select onChange={(e) => { setSelectedExercise(e.target.value) }}>
-    //             {exerciseList
-    //                 ? exerciseList.map((exercise) => {
-    //                     return (
-    //                         <option key={exercise.id} value={exercise.name}>
-    //                             {exercise.name}
-    //                         </option>
-    //                     )
-    //                 })
-    //                 : null}
-    //         </select> */}
-    //     </div>
-    // )
